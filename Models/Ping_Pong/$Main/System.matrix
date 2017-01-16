@@ -1,0 +1,162 @@
+
+System:Ping_Pong
+
+    | Copyright (C) 2017 Dark Matter Systems Ltd. All rights reserved.
+
+    Description
+        Paragraph:Title
+            The Ping Pong Model
+
+    Type
+        BaseType
+            Integer
+                Index : 0 .. 5
+                Bound : 5 .. 5
+
+    Matrix:Model:Application
+        Silo:M1:Software_Application
+            Realm:Analysis_Of_Application
+                Domain:Pinger
+
+                    Entity:Ping
+                        Attribute
+                            Index : Count
+                            Bound : Limit
+                        Relationship
+                            Signals --> Pong
+                        State
+                            CreationState:Activate
+                                Transition
+                                    EventState
+                                        Go -> Sending
+                                    IgnoreEvent
+                                        Wait
+                                    CannotHappen
+                                        Die
+                            DynamicState:Sending
+                                StateAction
+                                    Traverse
+                                        Navigation
+                                            Ping : Signals : Pong
+                                        TraverseSelection
+                                            CaseSelection
+                                                WhenCase
+                                                    ConditionAnd
+                                                        TestAnd
+                                                            Ping.Count << Ping.Limit
+                                                    WhenCaseSelection
+                                                        Assignment
+                                                            Evaluation:Ping.Count
+                                                                Addition
+                                                                    AdditionData
+                                                                        Ping.Count
+                                                                        <<IntegerOne>>
+                                                        Template
+                                                            <<:>>Ping Pinged (<<#Ping.Count>>)
+                                                        GenerateEvent
+                                                            Ping : Wait
+                                                            Pong : Go
+                                                NullCaseSelection
+                                                    GenerateEvent
+                                                        Ping : Die
+                                                        Pong : Die
+                                Transition
+                                    EventState
+                                        Wait -> Waiting
+                                        Die  -> Terminated
+                                    CannotHappen
+                                        Go
+                            DynamicState:Waiting
+                                Transition
+                                    EventState
+                                        Go -> Sending
+                                    CannotHappen
+                                        Wait
+                                        Die
+                            DeletionState:Terminated
+                                StateAction
+                                    Traverse
+                                        Navigation
+                                            Ping : Signals : Pong
+                                        TraverseSelection
+                                            Unrelate
+                                                Ping : Signals : Pong
+                                    Template
+                                        <<:>>Ping Terminated
+                                Transition
+                                    CannotHappen
+                                        Go
+                                        Wait
+                                        Die
+
+                    Entity:Pong
+                        Relationship
+                            Replies --> Ping
+                        State
+                            CreationState:Activate
+                                Transition
+                                    EventState
+                                        Go -> Sending
+                                    CannotHappen
+                                        Wait
+                                        Die
+                            DynamicState:Sending
+                                StateAction
+                                    Traverse
+                                        Navigation
+                                            Pong : Replies : Ping
+                                        TraverseSelection
+                                            Template
+                                                <<:>>Pong Pinged (<<#Ping.Count>>)
+                                            GenerateEvent
+                                                Ping : Go
+                                                Pong : Wait
+                                Transition
+                                    EventState
+                                        Wait -> Waiting
+                                    CannotHappen
+                                        Go
+                                        Die
+                            DynamicState:Waiting
+                                Transition
+                                    EventState
+                                        Go  -> Sending
+                                        Die -> Terminated
+                                    CannotHappen
+                                        Wait
+                            DeletionState:Terminated
+                                StateAction
+                                    Traverse
+                                        Navigation
+                                            Pong : Replies : Ping
+                                        TraverseSelection
+                                            Unrelate
+                                                Pong : Replies : Ping
+                                    Template
+                                        <<:>>Pong Terminated
+                                        <<:>>
+                                Transition
+                                    CannotHappen
+                                        Go
+                                        Wait
+                                        Die
+
+        Silo:M0:Real_World_Objects
+            RealmObject:Objects_Of_Application
+                DomainObject:Pinger
+                    EntityObject:Ping
+                        Object
+                            | Identity | State    | Count | Limit
+                            PING_ID001 : Activate :     0 :     5
+                        ObjectRelation:Signals:Pong
+                            | Identity | Identity
+                            PING_ID001 : PONG_ID001
+                        ObjectEvent
+                            | Identity | Event
+                            PING_ID001 : Go
+                    EntityObject:Pong
+                        Object
+                            | Identity | State
+                            PONG_ID001 : Activate
+                        ObjectRelation:Replies:Ping
+                            PONG_ID001 : PING_ID001
