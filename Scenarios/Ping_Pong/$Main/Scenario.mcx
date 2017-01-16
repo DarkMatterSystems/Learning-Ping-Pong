@@ -1,0 +1,18 @@
+
+| Ping_Pong Scenario
+
+trace all off
+trace display on
+trace events on
+trace states on
+
+initialise all
+
+display all
+
+host pause
+
+
+exit
+
+| Copyright (C) 2017 Dark Matter Systems Ltd. All rights reserved.

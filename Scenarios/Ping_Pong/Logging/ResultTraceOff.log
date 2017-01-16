@@ -1,0 +1,41 @@
+
+    Matrix Model Simulator - Learning Edition - Version 1.0.0
+    Development on THU-02-JAN-2014 @ 12:24:18
+    Copyright (C) 2014, Dark Matter Systems Ltd.  All rights reserved.
+
+    Connection established: MATRIX*CORE - Version 0.5.2
+
+$
+$ | Ping_Pong Scenario
+$
+$ trace all off
+$ trace display on
+$ trace events on
+$ trace states on
+$
+$ initialise all
+
+Ping Pinged (1)
+Pong Pinged (1)
+Ping Pinged (2)
+Pong Pinged (2)
+Ping Pinged (3)
+Pong Pinged (3)
+Ping Pinged (4)
+Pong Pinged (4)
+Ping Pinged (5)
+Pong Pinged (5)
+Ping Terminated
+Pong Terminated
+$
+$ display all
+$
+$ host pause
+Press any key to continue . . .
+$
+$
+$ exit
+
+        Model Simulation Elapsed Time: 00:00:01
+
+    Disconnected from MATRIX*CORE on THU-02-JAN-2014 @ 12:24:19
